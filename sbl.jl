@@ -260,7 +260,7 @@ function sbl_rwl1_simple(y, Φ, λ; τ = 1e-8, tol = 1e-8, maxiter = 100, verbos
   xhat = x
   Xhat = Xhat[:,1:iter-1]
   What = hcat(ones(n), What[:,1:iter-1])
-  cost = cost[1:iter-1]
+  cost = debug ? cost[1:iter-1] : nothing
 
   return xhat, Xhat, What, cost
 
