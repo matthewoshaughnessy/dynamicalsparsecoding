@@ -36,23 +36,23 @@ err_bpdn = rerr(xhat_bpdn)
 # --- solve with SBL using EM iterations ---
 include("sbl.jl");
 xhat_sbl, σ2_sbl, cost_sbl = sbl_em(y, Φ, σ2init = λ, updateσ2 = false,
-    maxiter = maxiter["EM"], verbose = true, debug = true);
+    maxiter = maxiter["EM"], verbose = false, debug = true);
 err_sbl = rerr(xhat_sbl)
 
 
 
 # --- solve with SBL using RWL1 iterations ---
 include("sbl.jl");
-xhat_sblrwl1, Xhat_sblrwl1, Γhat_sblrwl1, cost_sblrwl1 = sbl_rwl1(y, Φ, λ, τ = 0,
-    maxiter = maxiter["RWL1"], verbose = true, debug = true);
+xhat_sblrwl1, Xhat_sblrwl1, Γhat_sblrwl1, cost_sblrwl1 = sbl_rwl1(y, Φ, λ,
+    maxiter = maxiter["RWL1"], verbose = false, debug = true);
 errs_sblrwl1 = [rerr(Xhat_sblrwl1[:,i]) for i in 1:size(Xhat_sblrwl1,2)]
 
 
 
 # --- solve with SBL using RWL1 iterations (no latent variables) ---
 include("sbl.jl");
-xhat_sblrwl1_simple, Xhat_sblrwl1_simple, What_sblrwl1_simple, cost_sblrwl1_simple = sbl_rwl1_simple(y, Φ, λ, τ = 0,
-    maxiter = maxiter["RWL1"], verbose = true, debug = true);
+xhat_sblrwl1_simple, Xhat_sblrwl1_simple, What_sblrwl1_simple, cost_sblrwl1_simple = sbl_rwl1_simple(y, Φ, λ,
+    maxiter = maxiter["RWL1"], verbose = false, debug = true);
 errs_sblrwl1_simple = [rerr(Xhat_sblrwl1_simple[:,i]) for i in 1:size(Xhat_sblrwl1_simple,2)]
 
 
@@ -61,10 +61,11 @@ errs_sblrwl1_simple = [rerr(Xhat_sblrwl1_simple[:,i]) for i in 1:size(Xhat_sblrw
 p = plot()
 for i in 1:n
     if x[i] != 0
-        plot!(p,log10.([1; Γhat_sblrwl1[i,:]]), color=RGBA(0.3,0.1,1.0,0.8))
+        plot!(p, [1; What_sblrwl1_simple[i,:]], color=RGBA(0.3,0.1,1.0,0.8), label = "")
     else
-        plot!(p,log10.([1; Γhat_sblrwl1[i,:]]), xlab = "RWL1 iteration", ylab = "log \\gamma_i", 
+        plot!(p, [1; What_sblrwl1_simple[i,:]], label = "", xlab = "RWL1 iteration", ylab = "w_i", 
             color=RGBA(1.0,0.1,0.3,0.8))
     end
 end
 display(p)
+savefig("./figs/sbl_rwl1.pdf")

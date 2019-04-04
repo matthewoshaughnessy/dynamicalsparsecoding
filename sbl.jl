@@ -236,7 +236,7 @@ function sbl_rwl1_simple(y, Φ, λ; τ = 1e-8, tol = 1e-8, maxiter = 100, verbos
 
       # check convergence
       Xhat[:,iter] = x
-      What[γsupp,iter] = w[γsupp]
+      What[:,iter] = w
       converged = (iter > 1 && norm(γ-γold) < tol) || iter >= maxiter
       if verbose
           @printf("%d coefficients in model; ", Int(sum(γsupp)));
