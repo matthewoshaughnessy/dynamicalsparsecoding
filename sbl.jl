@@ -230,9 +230,9 @@ function sbl_rwl1_simple(y, Φ, λ; τ = 1e-8, tol = 1e-8, maxiter = 100, verbos
       x[γsupp] = xc
 
       # update w
-      w[γsupp] = 2*sqrt.(diag(Φ[:,γsupp]'*inv(λ*I+Φ[:,γsupp]*Diagonal(γ[γsupp])*Φ[:,γsupp]')*Φ[:,γsupp]))
       γ = 2*abs.(x) ./ w
       γsupp = γ .>= τ
+      w[γsupp] = 2*sqrt.(diag(Φ[:,γsupp]'*inv(λ*I+Φ[:,γsupp]*Diagonal(γ[γsupp])*Φ[:,γsupp]')*Φ[:,γsupp]))
 
       # check convergence
       Xhat[:,iter] = x
